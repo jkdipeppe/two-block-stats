@@ -9,6 +9,7 @@ class SSCNFT extends Component {
     this.state = { 
       solPrice: 0,
       shdwPrice: 0,
+      enterShdwPrice: 0,
       nftFloor: 100,
       shdwLeft: 10000,
       solanartFloor: 0,
@@ -29,7 +30,8 @@ class SSCNFT extends Component {
     .then(resp => resp.json())
     .then(shdwPrice => {
       this.setState({
-        shdwPrice: Number(shdwPrice["genesysgo-shadow"].usd)
+        shdwPrice: Number(shdwPrice["genesysgo-shadow"].usd),
+        enterShdwPrice: Number(shdwPrice["genesysgo-shadow"].usd)
       })
     })
     try{
@@ -67,7 +69,7 @@ class SSCNFT extends Component {
     }
     let updateSHDWPrice = (e) => {
       this.setState({
-        shdwPrice: e.target.value
+        enterShdwPrice: e.target.value
       })
     }
     let nftData = {
@@ -151,7 +153,7 @@ class SSCNFT extends Component {
       
     }
     let priceBasedOnFloor = this.state.nftFloor * this.state.solPrice / 10000
-    let floorBasedOnPrice = this.state.shdwPrice * 10000 / this.state.solPrice
+    let floorBasedOnPrice = this.state.enterShdwPrice * 10000 / this.state.solPrice
     return (
       <div className="NFTstyle">
         <h1 className="premiums">SSC NFT Calculator</h1>
