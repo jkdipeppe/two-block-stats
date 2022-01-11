@@ -1,0 +1,18 @@
+.BtcSpotPrices {
+  color: white !important;
+  background-color: #282c34;
+  min-height: 100vh;
+}
+
+.premiums {
+  padding-top: 10px;
+}
+
+.premium-spacing {
+  margin: 20px 20px;
+}
+
+.spotPrices {
+  font-size: 20px;
+  font-weight: bold;
+}

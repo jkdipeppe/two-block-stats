@@ -1,0 +1,26 @@
+.NFTstyle {
+    color: white !important;
+    background-color: #282c34;
+    min-height: 100vh;
+  }
+  
+  .premiums {
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
+  
+  .premium-spacing {
+    margin: 20px 20px;
+  }
+  
+  .spotPrices {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .largeText {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 10px;
+      line-height: 2em;
+  }
+  
