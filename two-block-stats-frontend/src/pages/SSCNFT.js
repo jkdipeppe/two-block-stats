@@ -168,7 +168,7 @@ class SSCNFT extends Component {
           <Grid.Row columns={2} >
             <Grid.Column>
               <h2>Calculate Token Price Based on NFT Floor</h2>
-              <p>$SHDW price based on current floor of {this.state.nftFloor} SOL and 10,000 tokens: <b class="largeText">${priceBasedOnFloor.toFixed(2)}</b></p>
+              <p>$SHDW price based on current floor of {this.state.nftFloor} SOL and 10,000 tokens: <b className="largeText">${priceBasedOnFloor.toFixed(2)}</b></p>
               <p>Enter floor price</p>
               <Input labelPosition='right' type='number' placeholder={this.state.nftFloor} >
                 <input onChange={(e)=>{updateSOLFloor(e)}}/>
@@ -177,7 +177,7 @@ class SSCNFT extends Component {
             </Grid.Column>
             <Grid.Column>
               <h2>Calculate NFT Floor Based on Token Price</h2>
-              <p>Floor Price Based on current $SHDW price of ${this.state.shdwPrice} and 10,000 tokens: <br/><b class="largeText">{floorBasedOnPrice.toFixed(2)} SOL</b></p>
+              <p>Floor Price Based on current $SHDW price of ${this.state.shdwPrice} and 10,000 tokens: <br/><b className="largeText">{floorBasedOnPrice.toFixed(2)} SOL</b></p>
               <p>Enter $SHDW Price To See Floor Value</p>
 
               <Input labelPosition='right' type='number' placeholder={this.state.shdwPrice} >
