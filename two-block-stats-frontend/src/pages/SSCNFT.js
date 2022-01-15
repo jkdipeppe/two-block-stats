@@ -1,6 +1,6 @@
 import './SSCNFT.css';
 import React, { Component } from 'react';
-import { Divider, Grid, Input, Label } from 'semantic-ui-react'
+import { Divider, Grid, Input, Label, Checkbox } from 'semantic-ui-react'
  
 class SSCNFT extends Component {
 
@@ -12,9 +12,11 @@ class SSCNFT extends Component {
       enterShdwPrice: 0,
       nftFloor: 100,
       shdwLeft: 10000,
+      tokenAmount: '10000',
       solanartFloor: 0,
       SSCNFTAddress: '',
       bonusRedeemed: false,
+
      };
   }
 
@@ -120,12 +122,10 @@ class SSCNFT extends Component {
             .then(nftTransactionData => {
               if(nftTransactionData.result.meta.postTokenBalances[0] && tokensWithdrawn === 0) {
                 if(nftTransactionData.result.meta.postTokenBalances[0].mint === "SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"){
-                  
-                  
-                  
+
                   let allMessages = nftTransactionData.result.meta.logMessages
 
-                  console.log(nftTransactionData.result)
+                  // console.log(nftTransactionData.result)
                   for (const message of allMessages) {
                     if (message.includes('reward without bonus')) {
                       tokensWithdrawn += Number(message.split('bonus ')[1]) / 1000000000;
@@ -143,17 +143,28 @@ class SSCNFT extends Component {
                     shdwLeft: 10000 - tokensWithdrawn,
                     bonusRedeemed: redeemed
                   })
-
                 }
               }
             })
           }
         }
       })
-      
     }
-    let priceBasedOnFloor = this.state.nftFloor * this.state.solPrice / 10000
-    let floorBasedOnPrice = this.state.enterShdwPrice * 10000 / this.state.solPrice
+
+    let swapTokenAmount =  () => {
+      if (this.state.tokenAmount === '10000') {
+        this.setState({
+          tokenAmount: '13000'
+        })
+      } else {
+        this.setState({
+          tokenAmount: '10000'
+        })
+      }
+    }
+    let priceBasedOnFloor = this.state.nftFloor * this.state.solPrice / Number(this.state.tokenAmount)
+    let floorBasedOnPrice = this.state.enterShdwPrice * Number(this.state.tokenAmount) / this.state.solPrice
+    
     return (
       <div className="NFTstyle">
         <h1 className="premiums">SSC NFT Calculator</h1>
@@ -163,6 +174,7 @@ class SSCNFT extends Component {
           
           <p>Current SHDW-USD price: ${this.state.shdwPrice}</p>
           <p>Current Solanart Floor price: {this.state.solanartFloor} SOL</p>
+          <b>10,000 Tokens&emsp;<Checkbox toggle onChange={swapTokenAmount}/> &emsp;13,000 Tokens</b>
         </div>
        
         <Divider clearing />
@@ -170,7 +182,7 @@ class SSCNFT extends Component {
           <Grid.Row columns={2} >
             <Grid.Column>
               <h2>Calculate Token Price Based on NFT Floor</h2>
-              <p>$SHDW price based on current floor of {this.state.nftFloor} SOL and 10,000 tokens: <b className="largeText">${priceBasedOnFloor.toFixed(2)}</b></p>
+              <p>$SHDW price based on current floor of {this.state.nftFloor} SOL and {this.state.tokenAmount} tokens: <b className="largeText">${priceBasedOnFloor.toFixed(2)}</b></p>
               <p>Enter floor price</p>
               <Input labelPosition='right' type='number' placeholder={this.state.nftFloor} >
                 <input onChange={(e)=>{updateSOLFloor(e)}}/>
@@ -179,7 +191,7 @@ class SSCNFT extends Component {
             </Grid.Column>
             <Grid.Column>
               <h2>Calculate NFT Floor Based on Token Price</h2>
-              <p>Floor Price Based on current $SHDW price of ${this.state.shdwPrice} and 10,000 tokens: <br/><b className="largeText">{floorBasedOnPrice.toFixed(2)} SOL</b></p>
+              <p>Floor Price Based on current $SHDW price of ${this.state.shdwPrice} and {this.state.tokenAmount} tokens: <br/><b className="largeText">{floorBasedOnPrice.toFixed(2)} SOL</b></p>
               <p>Enter $SHDW Price To See Floor Value</p>
 
               <Input labelPosition='right' type='number' placeholder={this.state.shdwPrice} >
