@@ -216,7 +216,8 @@ class SSCNFT extends Component {
             <Grid.Column>
               <h2>Enter SSC NFT address to Check How Many $SHDW tokens are left</h2>
               <Input type='text' placeholder={this.state.SSCNFTAddress} >
-                  <input onChange={(e)=>{updateSSCNFTAddress(e)}}/>
+                  {/* <input onChange={(e)=>{updateSSCNFTAddress(e)}}/> */}
+                  Under Maintenance: Check back soon!
                 {/* <Label>USD</Label> */}
               </Input>
               <h3>Bonus redeemed: {this.state.bonusRedeemed ? 'Yea, Its Gone' : 'Not Yet!'}</h3>
