@@ -99,7 +99,8 @@ class SSCNFT extends Component {
       fetch('https://api.mainnet-beta.solana.com', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
         body: JSON.stringify(nftData)
       })
@@ -110,42 +111,47 @@ class SSCNFT extends Component {
           for (const transaction of transactions) {
             let currSignature = transaction.signature;
             nftSignature['params'] = [currSignature]
+            try {
+              fetch('https://api.mainnet-beta.solana.com', {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                credentials: 'omit',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nftSignature)
+              })
+              .then(resp => resp.json())
+              .then(nftTransactionData => {
+                console.log(nftTransactionData)
+                if(nftTransactionData.result.meta.postTokenBalances[0] && tokensWithdrawn === 0) {
+                  if(nftTransactionData.result.meta.postTokenBalances[0].mint === "SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"){
 
-            fetch('https://api.mainnet-beta.solana.com', {
-              method: 'POST', // *GET, POST, PUT, DELETE, etc.
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(nftSignature)
-            })
-            .then(resp => resp.json())
-            .then(nftTransactionData => {
-              if(nftTransactionData.result.meta.postTokenBalances[0] && tokensWithdrawn === 0) {
-                if(nftTransactionData.result.meta.postTokenBalances[0].mint === "SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"){
+                    let allMessages = nftTransactionData.result.meta.logMessages
 
-                  let allMessages = nftTransactionData.result.meta.logMessages
-
-                  // console.log(nftTransactionData.result)
-                  for (const message of allMessages) {
-                    if (message.includes('reward without bonus')) {
-                      tokensWithdrawn += Number(message.split('bonus ')[1]) / 1000000000;
-                    }
-                    if (message.includes('stake_data.bonus_redeemed')) {
-                      if (message.split('stake_data.bonus_redeemed ')[1] === 'false'){
-                        redeemed = false
-                      } else {
-                        redeemed = true
+                    // console.log(nftTransactionData.result)
+                    for (const message of allMessages) {
+                      if (message.includes('reward without bonus')) {
+                        tokensWithdrawn += Number(message.split('bonus ')[1]) / 1000000000;
                       }
+                      if (message.includes('stake_data.bonus_redeemed')) {
+                        if (message.split('stake_data.bonus_redeemed ')[1] === 'false'){
+                          redeemed = false
+                        } else {
+                          redeemed = true
+                        }
 
+                      }
                     }
+                    this.setState({
+                      shdwLeft: 10000 - tokensWithdrawn,
+                      bonusRedeemed: redeemed
+                    })
                   }
-                  this.setState({
-                    shdwLeft: 10000 - tokensWithdrawn,
-                    bonusRedeemed: redeemed
-                  })
                 }
-              }
-            })
+              })
+          } catch (e) {
+              console.log("Unable to fetch data at this time");
+            }
           }
         }
       })
